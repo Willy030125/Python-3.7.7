@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/dash
-API_STR="-D__ANDROID_API__=28"
+API_STR="-D__ANDROID_API__="
 API_LEVEL="$(getprop ro.build.version.sdk)"
 CONFIG_FILE="<config file path>"
 
