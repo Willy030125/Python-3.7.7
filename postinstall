@@ -1,0 +1,20 @@
+#!/data/data/com.termux/files/usr/bin/dash
+API_STR="-D__ANDROID_API__=28"
+API_LEVEL="$(getprop ro.build.version.sdk)"
+CONFIG_FILE="<config file path>"
+
+echo "Updating Clang's config file..."
+
+# Check if the file exists and it contains "-D__ANDROID_API__="
+if [ -f "${CONFIG_FILE}" ] && [ "$(busybox grep -qs "${API_STR}" "${CONFIG_FILE}")" ]
+then
+    # Check if this config file is from an older Android version, if so, update it
+    if [ ! "$(busybox grep -qs "${API_STR}${API_LEVEL}" "${CONFIG_FILE}")" ]
+    then
+        busybox sed -i'' -e "s#${API_STR}[0-9]\*#${API_STR}${API_LEVEL}#g" "${CONFIG_FILE}"
+    fi
+    # Otherwise, do nothing as the file has the latest version
+else
+    # We now can just append __ANDROID_API__ to the file.
+    echo "${API_STR}${API_LEVEL}" >> "${CONFIG_FILE}"
+fi
